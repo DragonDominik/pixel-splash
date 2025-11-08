@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Splash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="flex flex-col w-screen h-screen items-center justify-center">
+
+        <div class="flex gap-4 mb-4">
+            <label class="flex flex-col items-center">
+                Rows
+                <input type="number" id="rowNumber" min="1" value="5"
+                    class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
+            </label>
+            <label class="flex flex-col items-center">
+                Columns
+                <input type="number" id="colNumber" min="1" value="5"
+                    class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
+            </label>
+            <label class="flex flex-col items-center">
+                Color
+                <input type="color" id="penColor" value="#000000" class="border border-black rounded w-20 h-8">
+            </label>
+            <label class="flex flex-col items-center">
+                Border Width
+                <input type="number" id="borderWidth" min="0" max="5" value="1"
+                    class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
+            </label>
+            <label class="flex flex-col items-center">
+                Border Color
+                <input type="color" id="borderColor" value="#000000" class="border border-black rounded w-20 h-8">
+            </label>
+        </div>
+
+        <canvas id="gridCanvas" class="border border-black"></canvas>
+
+        <div id="BottomRow1" class="flex mt-4 gap-4">
+            <button id="copyBtn" class="hover:bg-gray-300 border border-black rounded px-2 py-1 w-20 h-8">
+                Copy
+            </button>
+            <button id="resetBtn" class="hover:bg-gray-300 border border-black rounded px-2 py-1 w-20 h-8">
+                Reset
+            </button>
+        </div>
+        <div id="BottomRow2" class="hidden flex mt-4 h-8 justify-center text-center items-center">
+        </div>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+
+</html>
