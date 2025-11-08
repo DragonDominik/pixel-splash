@@ -5,9 +5,15 @@ import { resizePage } from "./actionManager.js";
 
 //load data from storage
 export function load() {
-    rowCell.value = Number(localStorage.getItem('row')) ?? 5;
-    colCell.value = Number(localStorage.getItem('col')) ?? 5;
-    borderWidth.value = Number(localStorage.getItem('borderWidth')) ?? 1;
+    const row = Number(localStorage.getItem('row'));
+    rowCell.value = row === 0 ? 5 : row;
+
+    const col = Number(localStorage.getItem('col'));
+    colCell.value = col === 0 ? 5 : col;
+
+    const bw = Number(localStorage.getItem('borderWidth'));
+    borderWidth.value = bw === 0 ? 1 : bw;
+
     borderColor.value = localStorage.getItem('borderColor') ?? "#000000";
 
     const savedCells = localStorage.getItem('paintedCells');
