@@ -16,8 +16,35 @@ resetBtn.addEventListener('click', reset);
 const copyBtn = document.querySelector("#copyBtn");
 copyBtn.addEventListener('click', copyCanvasToClipboard);
 
+const recentColorsContainer = document.getElementById('recentColors');
+
 let cellSize = 0;
 let paintedCells = []
+let recentColors = [];
+
+//load data from storage
+function load() {
+    rowCell.value = localStorage.getItem('row') ?? 5;
+    colCell.value = localStorage.getItem('col') ?? 5;
+
+    const savedCells = localStorage.getItem('paintedCells');
+    if (savedCells && savedCells.startsWith('[')) {
+        paintedCells = JSON.parse(savedCells);
+    } else {
+        paintedCells = [];
+        setUpCellGrid();
+    }
+
+    const savedRecent = localStorage.getItem('recentColors');
+    if (savedRecent && savedRecent.startsWith('[')) {
+        recentColors = JSON.parse(savedRecent);
+        renderRecentColors();
+    } else {
+        recentColors = [];
+    }
+    console.log(paintedCells);
+    resizePage();
+}
 
 function reset() {
     paintedCells = [];
@@ -60,6 +87,8 @@ function resizePage() {
         fixPaintedCellsSize();
     }
     reColorCells();
+
+    saveToLocalStorage();
 }
 
 function drawGrid() {
@@ -89,7 +118,7 @@ function drawGrid() {
 
 window.addEventListener('resize', resizePage);
 
-reset();
+load();
 
 // COLORING ################################
 function setUpCellGrid() {
@@ -138,13 +167,13 @@ function fixPaintedCellsSize() {
             });
         }
     }
-    
+
     removePaintedCellsExtra();
 }
 
 // removes empty rows and columns for performance
 function removePaintedCellsExtra() {
- const targetRows = Number(getRowCount());
+    const targetRows = Number(getRowCount());
     const targetCols = Number(getColCount());
 
     // remove extra rows
@@ -231,6 +260,9 @@ function colorCell(cell, color, isColoring = true) {
         ctx.lineWidth = borderWidth.value;
         ctx.stroke();
     }
+
+    //save
+    saveToLocalStorage();
 }
 
 function reColorCells() {
@@ -274,10 +306,7 @@ async function copyCanvasToClipboard() {
 }
 
 // Recent colors
-
-let recentColors = [];
 const maxRecentColors = 10;
-const recentColorsContainer = document.getElementById('recentColors');
 
 function addToRecentColors(color) {
     if (!color) return;
@@ -292,6 +321,9 @@ function addToRecentColors(color) {
 }
 
 function renderRecentColors() {
+    if (!recentColors) {
+        return;
+    }
     recentColorsContainer.innerHTML = '';
     recentColors.forEach(color => {
         const colorBox = document.createElement('div');
@@ -313,4 +345,12 @@ function startColorPicking() {
     isPickingColor = true;
     eyedropperBtn.classList.remove('hover:bg-gray-300');
     eyedropperBtn.classList.add('bg-green-400');
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem('row', rowCell.value);
+    localStorage.setItem('col', colCell.value);
+
+    localStorage.setItem('paintedCells', JSON.stringify(paintedCells));
+    localStorage.setItem('recentColors', JSON.stringify(recentColors));
 }
