@@ -15,19 +15,30 @@ export function reset() {
 }
 
 function getRowCount() {
-    return Math.max(1, Number(rowCell.value));
+    return Math.max(1, Math.min(Number(rowCell.value), 200));
 }
 
 function getColCount() {
-    return Math.max(1, Number(colCell.value));
+    return Math.max(1, Math.min(Number(colCell.value), 200));
 }
 
 let cellSize = null;
 
+let first = true;
 export function resizePage() {
     const baseDpr = window.devicePixelRatio || 1;
     const smoothening = 1; // for smoother canvas
     const dpr = Math.ceil(baseDpr * smoothening);
+
+    if(colCell.value > 200 || colCell.value < 1 || rowCell.value > 200 || rowCell.value < 1){
+        if(first){
+            first = false;
+        } else {
+            return;
+        }
+    } else{
+        first = true;
+    }
 
     // get cellsize
     const viewportWidth = document.documentElement.clientWidth;
@@ -39,7 +50,8 @@ export function resizePage() {
         maxHeight = (viewportHeight * 0.8) / getRowCount(); // desktop / tablet
     }
     const maxWidth = (viewportWidth * 0.8) / getColCount();
-    cellSize = Math.floor(Math.min(maxWidth, maxHeight));
+
+    cellSize = Math.min(maxWidth, maxHeight);
 
     // set canvas size in CSS pixels
     canvas.style.width = `${cellSize * getColCount()}px`;

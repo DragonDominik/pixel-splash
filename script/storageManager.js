@@ -45,8 +45,6 @@ export function setCleanCellGrid(rowCount, colCount) {
         let currentRow = [];
         for (let col = 0; col < colCount; col++) {
             currentRow.push({
-                "row": row,
-                "col": col,
                 "colored": false,
                 "color": null
             });
@@ -91,37 +89,21 @@ export function fixPaintedCellsSize(rowCount, colCount) {
     removePaintedCellsExtra(paintedCells, rowCount, colCount);
 }
 
-// removes empty rows and columns for performance
+// removes extra farther then 10 unseen away
 function removePaintedCellsExtra(paintedCells, targetRows, targetCols) {
-    // remove extra rows
-    while (paintedCells.length > targetRows) {
-        const lastRow = paintedCells[paintedCells.length - 1];
-        if (lastRow.every(cell => !cell.colored)) {
-            paintedCells.pop();
-        } else break;
-    }
+    const maxRows = Math.min(200, targetRows + 10);
+    const maxCols = Math.min(200, targetCols + 10);
 
-    // remove extra columns
-    if (paintedCells[0]) {
-        while (paintedCells[0].length > targetCols) {
-            const lastColIndex = paintedCells[0].length - 1;
-            let isEmpty = true;
-            for (let row = 0; row < paintedCells.length; row++) {
-                if (paintedCells[row][lastColIndex] && paintedCells[row][lastColIndex].colored) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            if (isEmpty) {
-                for (let row = 0; row < paintedCells.length; row++) {
-                    paintedCells[row].pop();
-                }
-            } else break;
-        }
-    }
+    // Keep only rows 0..maxRows-1
+    paintedCells = paintedCells.slice(0, maxRows);
+
+    // Keep only columns 0..maxCols-1 for each row
+    paintedCells = paintedCells.map(row => row.slice(0, maxCols));
 
     setPaintedCells(paintedCells);
 }
+
+
 
 const bottomRow1 = document.querySelector("#BottomRow1");
 const bottomRow2 = document.querySelector("#BottomRow2");

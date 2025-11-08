@@ -1,6 +1,6 @@
 import { resizePage, reset } from './actionManager.js';
 import { load, copyCanvasToClipboard } from './storageManager.js';
-import './colorBar.js'; 
+import './colorBar.js';
 import './drawing.js';
 import { rowCell, colCell, borderWidth, borderColor } from './elements.js';
 
@@ -8,8 +8,16 @@ const resetBtn = document.querySelector("#resetBtn");
 const copyBtn = document.querySelector("#copyBtn");
 
 // Event listeners
-rowCell.addEventListener("input", resizePage);
-colCell.addEventListener("input", resizePage);
+
+let resizeTimeoutInput;
+
+function debounceResize() {
+    clearTimeout(resizeTimeoutInput);
+    resizeTimeoutInput = setTimeout(resizePage, 500);
+}
+rowCell.addEventListener("input", debounceResize);
+colCell.addEventListener("input", debounceResize);
+
 borderWidth.addEventListener("input", resizePage);
 borderColor.addEventListener("input", resizePage);
 resetBtn.addEventListener('click', reset);

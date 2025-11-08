@@ -42,7 +42,7 @@ export function reColorCells(cellSize) {
         for (let col = 0; col < paintedCells[row].length; col++) {
             const cell = paintedCells[row][col];
             if (cell.colored) {
-                colorCell(cellSize, cell, cell.color);
+                colorCell(cellSize, {"row": row, "col": col}, cell.color);
             }
         }
     }
