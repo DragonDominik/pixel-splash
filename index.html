@@ -9,9 +9,9 @@
 </head>
 
 <body>
-    <div class="flex flex-col w-screen h-screen items-center justify-center">
+    <div class="flex flex-col w-[90%] mx-auto h-screen items-center justify-center">
 
-        <div class="flex gap-4 mb-4">
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-4">
             <label class="flex flex-col items-center">
                 Rows
                 <input type="number" id="rowNumber" min="1" value="5"
@@ -32,20 +32,22 @@
                     class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
             </label>
             <label class="flex flex-col items-center">
-                Border Color
+                Border
                 <input type="color" id="borderColor" value="#000000" class="border border-black rounded w-20 h-8">
             </label>
         </div>
 
-        <div class="flex items-start gap-2">
-            <div>
+        <div class="w-full flex items-start justify-center flex-col md:flex-row gap-2">
+            <div class="flex gap-2 flex-warp flex-row md:flex-col justify-center w-full md:w-auto">
                 <button id="colorPickerBtn"
-                    class="w-8 h-8 mb-2 border border-black rounded flex items-center justify-center hover:bg-gray-300">
+                    class="w-8 h-8 border border-black rounded flex items-center justify-center hover:bg-gray-300">
                     🎨
                 </button>
-                <div id="recentColors" class="flex flex-col gap-2"></div>
+                <div id="recentColors" class="flex flex-row md:flex-col gap-2"></div>
             </div>
-            <canvas id="gridCanvas" class="border border-black"></canvas>
+            <div class="items-center justify-center flex w-full md:w-auto">
+                <canvas id="gridCanvas" class="border border-black"></canvas>
+            </div>
         </div>
 
 

@@ -28,8 +28,15 @@ export function resizePage() {
     const dpr = baseDpr * smoothening;
 
     // get cellsize
-    const maxWidth = (document.documentElement.clientWidth * 0.8) / getColCount();
-    const maxHeight = (document.documentElement.clientHeight * 0.8) / getRowCount();
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = document.documentElement.clientHeight;
+    let maxHeight;
+    if (viewportWidth < 640) {
+        maxHeight = (viewportHeight * 0.5) / getRowCount(); // mobil
+    } else {
+        maxHeight = (viewportHeight * 0.8) / getRowCount(); // desktop / tablet
+    }
+    const maxWidth = (viewportWidth * 0.8) / getColCount();
     cellSize = Math.min(maxWidth, maxHeight);
 
     // set canvas size in CSS pixels
