@@ -1,4 +1,4 @@
-import { rowCell, colCell, canvas } from "./elements.js";
+import { rowCell, colCell, canvas, borderColor, borderWidth } from "./elements.js";
 import { setPaintedCells, getPaintedCells } from "./drawing.js";
 import { addToRecentColors, getRecentColors } from "./colorBar.js";
 import { resizePage } from "./actionManager.js";
@@ -7,6 +7,8 @@ import { resizePage } from "./actionManager.js";
 export function load() {
     rowCell.value = Number(localStorage.getItem('row')) ?? 5;
     colCell.value = Number(localStorage.getItem('col')) ?? 5;
+    borderWidth.value = Number(localStorage.getItem('borderWidth')) ?? 1;
+    borderColor.value = localStorage.getItem('borderColor') ?? "#000000";
 
     const savedCells = localStorage.getItem('paintedCells');
     if (savedCells && savedCells.startsWith('[')) {
@@ -148,6 +150,8 @@ export async function copyCanvasToClipboard() {
 export function saveToLocalStorage() {
     localStorage.setItem('row', rowCell.value);
     localStorage.setItem('col', colCell.value);
+    localStorage.setItem('borderWidth', borderWidth.value);
+    localStorage.setItem('borderColor', borderColor.value);
 
     localStorage.setItem('paintedCells', JSON.stringify(getPaintedCells()));
     localStorage.setItem('recentColors', JSON.stringify(getRecentColors()));

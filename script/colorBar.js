@@ -1,7 +1,7 @@
 import { penColor } from './elements.js';
 
 let isPickingColor = false;
-const eyedropperBtn = document.getElementById('colorPickerBtn');
+export const eyedropperBtn = document.getElementById('colorPickerBtn');
 eyedropperBtn.addEventListener('click', startColorPicking);
 
 export function getIsPickingColor(){

@@ -1,13 +1,15 @@
 
-import { colCell, rowCell, canvas, ctx } from "./elements.js";
+import { colCell, rowCell, canvas, ctx, borderColor, borderWidth } from "./elements.js";
 import { drawGrid, reColorCells, setPaintedCells, getPaintedCells, colorCell } from "./drawing.js";
 import { fixPaintedCellsSize, saveToLocalStorage, setCleanCellGrid } from "./storageManager.js";
-import { getIsPickingColor, setIsPickingColor, addToRecentColors } from "./colorBar.js";
+import { getIsPickingColor, setIsPickingColor, addToRecentColors, eyedropperBtn } from "./colorBar.js";
 import { penColor } from './elements.js';
 
 //resets drawings
 export function reset() {
     setPaintedCells([]);
+    borderColor.value = "#000000";
+    borderWidth.value = 1;
     setCleanCellGrid(getRowCount(), getColCount());
     resizePage();
 }
@@ -24,8 +26,8 @@ let cellSize = null;
 
 export function resizePage() {
     const baseDpr = window.devicePixelRatio || 1;
-    const smoothening = 3; // for smoother canvas
-    const dpr = baseDpr * smoothening;
+    const smoothening = 1; // for smoother canvas
+    const dpr = Math.ceil(baseDpr * smoothening);
 
     // get cellsize
     const viewportWidth = document.documentElement.clientWidth;
@@ -37,7 +39,7 @@ export function resizePage() {
         maxHeight = (viewportHeight * 0.8) / getRowCount(); // desktop / tablet
     }
     const maxWidth = (viewportWidth * 0.8) / getColCount();
-    cellSize = Math.min(maxWidth, maxHeight);
+    cellSize = Math.floor(Math.min(maxWidth, maxHeight));
 
     // set canvas size in CSS pixels
     canvas.style.width = `${cellSize * getColCount()}px`;
@@ -49,7 +51,7 @@ export function resizePage() {
 
     // scale content to dpr
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingEnabled = false;
 
     drawGrid(getRowCount(), getColCount(), cellSize);
 
@@ -60,17 +62,59 @@ export function resizePage() {
     saveToLocalStorage();
 }
 
-// detect cell click
-function cellClicked(clickedCell) {
+//drag to draw
+let isDragging = false;
+let prevCell = {
+    row: null,
+    col: null,
+};
+
+document.addEventListener('mousedown', startDragging)
+
+function startDragging(e) {
+    isDragging = true;
+    prevCell.row = null;
+    prevCell.col = null;
+    cellDragging(e);
+}
+
+document.addEventListener('mouseup', stopDragging)
+
+function stopDragging() {
+    isDragging = false;
+    prevCell.row = null;
+    prevCell.col = null;
+}
+
+canvas.addEventListener('mousemove', cellDragging);
+
+
+function cellDragging(e) {
+    //if not on canvas don't try to paint
+    if (e.target !== canvas) return;
+
+    //if mouse not down dont try to paint
+    if (!isDragging) {
+        return;
+    }
+
     const canvasDetails = canvas.getBoundingClientRect();
-    const x = clickedCell.clientX - canvasDetails.left;
-    const y = clickedCell.clientY - canvasDetails.top;
+    const x = e.clientX - canvasDetails.left;
+    const y = e.clientY - canvasDetails.top;
 
     //which cell is that?
-    const currentCell = {
+    let currentCell = {
         row: Math.floor(y / cellSize),
         col: Math.floor(x / cellSize),
     };
+
+    //if same as before return
+    if (currentCell.row == prevCell.row && prevCell.col == currentCell.col) {
+        return;
+    }
+
+    prevCell.row = Math.floor(y / cellSize);
+    prevCell.col = Math.floor(x / cellSize);
 
     const paintedCells = getPaintedCells();
     //if we are color picking
@@ -81,6 +125,7 @@ function cellClicked(clickedCell) {
         setIsPickingColor(false);
         eyedropperBtn.classList.remove('bg-green-400');
         eyedropperBtn.classList.add('hover:bg-gray-300');
+        stopDragging();
         return;
     }
 
@@ -91,4 +136,3 @@ function cellClicked(clickedCell) {
         addToRecentColors(penColor.value);
     }
 }
-canvas.addEventListener('click', cellClicked);
