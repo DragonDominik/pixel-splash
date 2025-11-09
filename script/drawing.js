@@ -41,17 +41,16 @@ export function reColorCells(cellSize) {
     for (let row = 0; row < paintedCells.length; row++) {
         for (let col = 0; col < paintedCells[row].length; col++) {
             const cell = paintedCells[row][col];
-            if (cell.colored) {
-                colorCell(cellSize, {"row": row, "col": col}, cell.color);
+            if (cell != "#ffffff") {
+                colorCell(cellSize, {"row": row, "col": col}, cell);
             }
         }
     }
 }
 
 // color specific cell
-export function colorCell(cellSize, cell, color, isColoring = true) {
-    paintedCells[cell.row][cell.col].colored = isColoring;
-    paintedCells[cell.row][cell.col].color = isColoring ? color : null;
+export function colorCell(cellSize, cell, color) {
+    paintedCells[cell.row][cell.col] = color;
 
     // color it
     ctx.fillStyle = color;

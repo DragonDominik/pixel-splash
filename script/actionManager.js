@@ -15,11 +15,11 @@ export function reset() {
 }
 
 function getRowCount() {
-    return Math.max(1, Math.min(Number(rowCell.value), 200));
+    return Math.max(1, Math.min(Number(rowCell.value), 500));
 }
 
 function getColCount() {
-    return Math.max(1, Math.min(Number(colCell.value), 200));
+    return Math.max(1, Math.min(Number(colCell.value), 500));
 }
 
 let cellSize = null;
@@ -27,16 +27,16 @@ let cellSize = null;
 let first = true;
 export function resizePage() {
     const baseDpr = window.devicePixelRatio || 1;
-    const smoothening = 1; // for smoother canvas
+    const smoothening = 2; // for smoother canvas
     const dpr = Math.ceil(baseDpr * smoothening);
 
-    if(colCell.value > 200 || colCell.value < 1 || rowCell.value > 200 || rowCell.value < 1){
-        if(first){
+    if (colCell.value > 500 || colCell.value < 1 || rowCell.value > 500 || rowCell.value < 1) {
+        if (first) {
             first = false;
         } else {
             return;
         }
-    } else{
+    } else {
         first = true;
     }
 
@@ -47,11 +47,11 @@ export function resizePage() {
     if (viewportWidth < 640) {
         maxHeight = (viewportHeight * 0.5) / getRowCount(); // mobil
     } else {
-        maxHeight = (viewportHeight * 0.8) / getRowCount(); // desktop / tablet
+        maxHeight = (viewportHeight * 0.85) / getRowCount(); // desktop / tablet
     }
-    const maxWidth = (viewportWidth * 0.8) / getColCount();
+    const maxWidth = (viewportWidth * 0.90) / getColCount();
 
-    cellSize = Math.min(maxWidth, maxHeight);
+    cellSize = Math.floor(Math.min(maxWidth, maxHeight));
 
     // set canvas size in CSS pixels
     canvas.style.width = `${cellSize * getColCount()}px`;
@@ -80,6 +80,7 @@ let prevCell = {
     row: null,
     col: null,
 };
+let clearing = null;
 
 document.addEventListener('mousedown', startDragging)
 
@@ -96,6 +97,7 @@ function stopDragging() {
     isDragging = false;
     prevCell.row = null;
     prevCell.col = null;
+    clearing = null;
     saveToLocalStorage();
 }
 
@@ -132,7 +134,7 @@ function cellDragging(e) {
     const paintedCells = getPaintedCells();
     //if we are color picking
     if (getIsPickingColor()) {
-        const pickedColor = paintedCells[currentCell.row][currentCell.col].color || '#ffffff';
+        const pickedColor = paintedCells[currentCell.row][currentCell.col];
         penColor.value = pickedColor;
 
         setIsPickingColor(false);
@@ -142,10 +144,13 @@ function cellDragging(e) {
         return;
     }
 
-    if (paintedCells[currentCell.row][currentCell.col].colored && paintedCells[currentCell.row][currentCell.col].color == penColor.value) {
-        colorCell(cellSize, currentCell, "#ffffff", false);
-    } else {
-        colorCell(cellSize, currentCell, penColor.value);
-        addToRecentColors(penColor.value);
+    if (clearing === null && paintedCells[currentCell.row][currentCell.col] != "#ffffff" && paintedCells[currentCell.row][currentCell.col] == penColor.value) {
+        clearing = true;
+    } else if (clearing === null) {
+        clearing = false;
     }
+
+    const color = clearing ? "#ffffff" : penColor.value;
+    if(!clearing) addToRecentColors(penColor.value);
+    colorCell(cellSize, currentCell, color);
 }

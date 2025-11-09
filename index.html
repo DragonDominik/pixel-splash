@@ -11,55 +11,59 @@
 <body>
     <div class="flex flex-col w-[90%] mx-auto h-screen items-center justify-center">
 
-        <div class="flex flex-wrap items-center justify-center gap-4 mb-4">
-            <label class="flex flex-col items-center">
-                Rows
-                <input type="number" id="rowNumber" min="1" max="200" value="5"
-                    class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
-            </label>
-            <label class="flex flex-col items-center">
-                Columns
-                <input type="number" id="colNumber" min="1" max="200" value="5"
-                    class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
-            </label>
-            <label class="flex flex-col items-center">
-                Color
-                <input type="color" id="penColor" value="#000000" class="border border-black rounded w-20 h-8">
-            </label>
-            <label class="flex flex-col items-center">
-                Border Width
-                <input type="number" id="borderWidth" min="0" max="5" value="1"
-                    class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
-            </label>
-            <label class="flex flex-col items-center">
-                Border
-                <input type="color" id="borderColor" value="#000000" class="border border-black rounded w-20 h-8">
-            </label>
-        </div>
-
-        <div class="w-full flex items-start justify-center flex-col md:flex-row gap-2">
-            <div class="flex gap-2 flex-warp flex-row md:flex-col justify-center w-full md:w-auto">
-                <button id="colorPickerBtn"
-                    class="w-8 h-8 border border-black rounded flex items-center justify-center hover:bg-gray-300">
-                    🎨
+        <!-- Top bar (5vh) -->
+        <div
+            class="fixed top-0 left-0 w-full h-[30vh] md:h-[10vh] flex flex-wrap items-center justify-center gap-4 z-50 px-2">
+            <div class="items-end justify-center flex flex-wrap gap-4">
+                <label class="flex flex-col items-center">
+                    Rows
+                    <input type="number" id="rowNumber" min="1" max="500" value="5"
+                        class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
+                </label>
+                <label class="flex flex-col items-center">
+                    Columns
+                    <input type="number" id="colNumber" min="1" max="500" value="5"
+                        class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
+                </label>
+                <label class="flex flex-col items-center">
+                    Color
+                    <input type="color" id="penColor" value="#000000" class="border border-black rounded w-20 h-8">
+                </label>
+                <label class="flex flex-col items-center">
+                    Border Width
+                    <input type="number" id="borderWidth" min="0" max="3" value="1"
+                        class="hover:bg-gray-100 border border-black rounded px-2 py-1 w-20 h-8">
+                </label>
+                <label class="flex flex-col items-center">
+                    Border
+                    <input type="color" id="borderColor" value="#000000" class="border border-black rounded w-20 h-8">
+                </label>
+                <button id="copyBtn" class="hover:bg-gray-300 border border-black rounded px-2 py-1 w-20 h-8">
+                    Copy
                 </button>
-                <div id="recentColors" class="flex flex-row md:flex-col gap-2"></div>
-            </div>
-            <div class="items-center justify-center flex w-full md:w-auto">
-                <canvas id="gridCanvas" class="border border-black"></canvas>
+                <button id="resetBtn" class="hover:bg-gray-300 border border-black rounded px-2 py-1 w-20 h-8">
+                    Reset
+                </button>
             </div>
         </div>
 
-        <div id="BottomRow1" class="flex mt-4 gap-4">
-            <button id="copyBtn" class="hover:bg-gray-300 border border-black rounded px-2 py-1 w-20 h-8">
-                Copy
+        <!-- Colors panel -->
+        <div id="colorsPanel"
+            class="fixed left-0 bottom-0 md:top-[10vh] md:left-0 w-full md:w-auto flex flex-wrap md:flex-col gap-2 p-2 z-50 justify-center md:justify-start">
+            <button id="colorPickerBtn"
+                class="w-8 h-8 border border-black rounded flex items-center justify-center hover:bg-gray-300">
+                🎨
             </button>
-            <button id="resetBtn" class="hover:bg-gray-300 border border-black rounded px-2 py-1 w-20 h-8">
-                Reset
-            </button>
+            <div id="recentColors" class="flex flex-wrap md:flex-col gap-2 justify-center md:justify-start">
+                <!-- dynamically added colors -->
+            </div>
         </div>
-        <div id="BottomRow2" class="hidden flex mt-4 h-8 justify-center text-center items-center">
+
+        <!-- Canvas -->
+        <div class="mt-[10vh] flex justify-center items-start">
+            <canvas id="gridCanvas" class="border border-black"></canvas>
         </div>
+
 
         <script type="module" src="script/main.js"></script>
     </div>

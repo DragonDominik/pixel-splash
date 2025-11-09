@@ -44,10 +44,9 @@ export function setCleanCellGrid(rowCount, colCount) {
     for (let row = 0; row < rowCount; row++) {
         let currentRow = [];
         for (let col = 0; col < colCount; col++) {
-            currentRow.push({
-                "colored": false,
-                "color": null
-            });
+            currentRow.push(
+                "#ffffff"
+            );
         }
         cellGrid.push(currentRow);
     }
@@ -64,12 +63,9 @@ export function fixPaintedCellsSize(rowCount, colCount) {
     for (let row = currentRows; row < rowCount; row++) {
         let newRow = [];
         for (let col = 0; col < colCount; col++) {
-            newRow.push({
-                row: row,
-                col: col,
-                colored: false,
-                color: null
-            });
+            newRow.push(
+                "#ffffff"
+            );
         }
         paintedCells.push(newRow);
     }
@@ -77,12 +73,9 @@ export function fixPaintedCellsSize(rowCount, colCount) {
     // extend rows with missing cols
     for (let row = 0; row < currentRows; row++) {
         for (let col = currentCols; col < colCount; col++) {
-            paintedCells[row].push({
-                row: row,
-                col: col,
-                colored: false,
-                color: null
-            });
+            paintedCells[row].push(
+                "#ffffff"
+            );
         }
     }
 
@@ -91,8 +84,8 @@ export function fixPaintedCellsSize(rowCount, colCount) {
 
 // removes extra farther then 10 unseen away
 function removePaintedCellsExtra(paintedCells, targetRows, targetCols) {
-    const maxRows = Math.min(200, targetRows + 10);
-    const maxCols = Math.min(200, targetCols + 10);
+    const maxRows = Math.min(500, targetRows + 10);
+    const maxCols = Math.min(500, targetCols + 10);
 
     // Keep only rows 0..maxRows-1
     paintedCells = paintedCells.slice(0, maxRows);
@@ -103,12 +96,9 @@ function removePaintedCellsExtra(paintedCells, targetRows, targetCols) {
     setPaintedCells(paintedCells);
 }
 
-
-
-const bottomRow1 = document.querySelector("#BottomRow1");
-const bottomRow2 = document.querySelector("#BottomRow2");
-
 // get screenshot
+const copyBtn = document.querySelector("#copyBtn");
+
 export async function copyCanvasToClipboard() {
     try {
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
@@ -116,21 +106,12 @@ export async function copyCanvasToClipboard() {
         const item = new ClipboardItem({ 'image/png': blob });
         await navigator.clipboard.write([item]);
 
-        bottomRow1.classList.add('hidden');
-
-        bottomRow2.textContent = "Image copied to clipboard";
-        bottomRow2.classList.remove('hidden');
+        copyBtn.textContent = "Copied";
     } catch (err) {
-        bottomRow1.classList.add('hidden');
-
-        bottomRow2.textContent = "Error while copying";
-        bottomRow2.classList.remove('hidden');
+        copyBtn.textContent = "Error";
     }
     setTimeout(() => {
-        bottomRow2.classList.add('hidden');
-        bottomRow2.textContent = "";
-
-        bottomRow1.classList.remove('hidden');
+        copyBtn.textContent = "Copy";
     }, 1000);
 }
 
