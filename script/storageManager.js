@@ -32,8 +32,6 @@ export function load() {
     if (savedRecent && savedRecent.startsWith('[')) {
         const colors = JSON.parse(savedRecent);
         colors.reverse().forEach(color => addToRecentColors(color));
-    } else {
-        recentColors = [];
     }
     resizePage();
 }
