@@ -69,7 +69,4 @@ export function colorCell(cellSize, cell, color, isColoring = true) {
         ctx.lineWidth = borderWidth.value;
         ctx.stroke();
     }
-
-    //save
-    saveToLocalStorage();
 }

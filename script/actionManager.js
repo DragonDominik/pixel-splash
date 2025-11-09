@@ -96,6 +96,7 @@ function stopDragging() {
     isDragging = false;
     prevCell.row = null;
     prevCell.col = null;
+    saveToLocalStorage();
 }
 
 canvas.addEventListener('mousemove', cellDragging);
