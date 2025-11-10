@@ -30,4 +30,4 @@ On resizing the canvas saves +10 cols and rows data
 
 ## About
 
-This is a small projekt made purely out of fun, just a straightforward pixel art drawing experience in the browser.
+This is a small project was made purely out of fun, just a straightforward pixel art drawing experience in the browser.
