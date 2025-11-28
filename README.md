@@ -2,7 +2,7 @@
 
 A simple and fun pixel art web app built with **Tailwind CSS** and **JavaScript**. Draw pixel art directly in your browser, everything is saved automatically to **localStorage** while you create.
 
-**Live Demo:** [https://dragondominik.github.io/pixel-splash/](https://dragondominik.github.io/pixel-splash/)
+Demo Here → **[Pixel Splash](https://dragondominik.github.io/pixel-splash/)**  
 
 ---
 
